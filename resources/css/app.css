@@ -1,11 +1,25 @@
 @import 'tailwindcss';
 
+@source '../../vendor/filament/**/*.blade.php';
+@source '../../vendor/livewire/**/*.blade.php';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
+@source '../../app/**/*.php';
+
+[x-cloak] { display: none !important; }
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-serif: 'DM Serif Display', Georgia, serif;
+
+    --color-film-bg: #FAF7F2;
+    --color-film-brown: #2C1810;
+    --color-film-brown-muted: #6B4226;
+    --color-film-accent: #E85D04;
+    --color-film-accent-dark: #C84B00;
+    --color-film-cream: #F5F0E8;
+    --color-film-warm-gray: #8B7355;
+    --color-film-border: #DDD5C5;
 }

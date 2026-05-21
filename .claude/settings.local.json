@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php artisan *)",
+      "Bash(composer show *)",
+      "PowerShell(composer *)",
+      "PowerShell(Test-Path \"C:\\\\Users\\\\Florian\\\\Herd\\\\flashback\"; [System.IO.Directory]::GetFiles\\(\"C:\\\\Users\\\\Florian\\\\Herd\\\\flashback\"\\) | Select-Object -First 20; [System.IO.Directory]::GetDirectories\\(\"C:\\\\Users\\\\Florian\\\\Herd\\\\flashback\"\\) | Select-Object -First 20)",
+      "PowerShell(npm *)",
+      "WebSearch",
+      "WebFetch(domain:filamentphp.com)",
+      "WebFetch(domain:packagist.org)",
+      "PowerShell(cd \"C:\\\\Users\\\\Florian\\\\Herd\\\\flashback\"; php -r \"require 'vendor/autoload.php'; \\\\$r = new ReflectionClass\\('Filament\\\\Resources\\\\Resource'\\); foreach\\(\\\\$r->getProperties\\(\\) as \\\\$p\\) { if\\(\\\\$p->isStatic\\(\\)\\) echo \\\\$p->getName\\(\\) . ': ' . \\(\\\\$p->hasType\\(\\) ? \\\\$p->getType\\(\\) : 'untyped'\\) . PHP_EOL; }\" 2>&1 | Select-Object -First 30)",
+      "Bash(grep -rn \"Components\\\\\\\\\\\\\\\\TextInput\\\\|Forms\\\\\\\\\\\\\\\\Components\\\\|Schemas\\\\\\\\\\\\\\\\Components\\\\|Schema::make\" \"C:\\\\Users\\\\Florian\\\\Herd\\\\flashback\\\\vendor\\\\filament\\\\filament\\\\src\\\\Resources\")",
+      "Bash(grep -n 'function getSchema\\\\|function schema\\\\b\\\\|$this->form\\\\b\\\\|getCachedSchema\\\\|function fill\\\\b' 'C:\\\\Users\\\\Florian\\\\Herd\\\\flashback\\\\vendor\\\\filament\\\\schemas\\\\src\\\\Concerns\\\\InteractsWithSchemas.php')",
+      "Bash(Remove-Item \"C:\\\\Users\\\\Florian\\\\Herd\\\\flashback\\\\app\\\\Filament\\\\Resources\\\\AlbumResource\\\\Pages\\\\ManageAlbumPhotos.php\" -Force)",
+      "Bash(Remove-Item \"C:\\\\Users\\\\Florian\\\\Herd\\\\flashback\\\\resources\\\\views\\\\filament\\\\resources\\\\album-resource\\\\pages\\\\manage-album-photos.blade.php\" -Force)",
+      "PowerShell(New-Item *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Florian\\\\Herd\\\\flashback\" -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(cd C:\\\\\\\\Users\\\\\\\\Florian\\\\\\\\Herd\\\\\\\\flashback)",
+      "PowerShell(head *)",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Florian\\\\Herd\\\\flashback\" -Recurse -Directory | Where-Object {$_.Name -match \"Filament|Livewire|Models\"} | Select-Object -ExpandProperty FullName)"
+    ]
+  }
+}
