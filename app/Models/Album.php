@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Album extends Model
 {
@@ -16,6 +18,7 @@ class Album extends Model
         'access_code',
         'sort_order',
         'cover_photo_id',
+        'share_token',
     ];
 
     protected $casts = [
@@ -25,6 +28,15 @@ class Album extends Model
         'cover_photo_id' => 'integer',
     ];
 
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function (Album $album) {
+            $album->share_token ??= Str::uuid()->toString();
+        });
+    }
+
     public function photos(): HasMany
     {
         return $this->hasMany(Photo::class)->orderBy('sort_order');
@@ -33,6 +45,11 @@ class Album extends Model
     public function coverPhoto(): BelongsTo
     {
         return $this->belongsTo(Photo::class, 'cover_photo_id');
+    }
+
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
     }
 
     public function isUnlocked(): bool
@@ -50,6 +67,11 @@ class Album extends Model
             return false;
         }
 
-        return strtoupper(trim($code)) === strtoupper($this->access_code);
+        return strtolower(trim($code)) === strtolower($this->access_code);
+    }
+
+    public function shareUrl(): string
+    {
+        return route('albums.join', $this->share_token);
     }
 }

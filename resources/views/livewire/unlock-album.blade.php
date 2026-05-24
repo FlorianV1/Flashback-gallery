@@ -29,19 +29,19 @@
                         <input
                             wire:model="code"
                             type="text"
-                            maxlength="8"
-                            placeholder="— — — — — —"
+                            maxlength="20"
+                            placeholder="e.g. ocean74"
                             autocomplete="off"
                             autocorrect="off"
-                            autocapitalize="characters"
+                            autocapitalize="off"
                             spellcheck="false"
-                            oninput="this.value = this.value.toUpperCase()"
-                            class="w-full text-center font-mono text-2xl uppercase py-3 px-4 rounded-sm border-2 outline-none"
+                            oninput="this.value = this.value.toLowerCase().replace(/\s/g, '')"
+                            class="w-full text-center font-mono text-xl py-3 px-4 rounded-sm border-2 outline-none"
                             style="
                                 background: #FAF7F2;
                                 color: #2C1810;
                                 border-color: {{ $error ? '#ef4444' : '#DDD5C5' }};
-                                letter-spacing: 0.45em;
+                                letter-spacing: 0.2em;
                                 transition: border-color 0.15s ease;
                             "
                             onfocus="this.style.borderColor='#E85D04'"

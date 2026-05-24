@@ -103,7 +103,6 @@
                         onmouseleave="this.style.transform='scale(1)'"
                         loading="lazy"
                     >
-                    {{-- Hover overlay --}}
                     <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100"
                          style="background: rgba(20,10,5,0.35); transition: opacity 0.2s ease;">
                         <div class="w-9 h-9 rounded-full flex items-center justify-center" style="background: rgba(255,255,255,0.92);">
@@ -130,7 +129,6 @@
          style="background: rgba(12,6,3,0.96);"
          @click.self="close()">
 
-        {{-- Close --}}
         <button @click="close()"
                 class="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center z-10"
                 style="background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); transition: background 0.15s ease;"
@@ -141,7 +139,6 @@
             </svg>
         </button>
 
-        {{-- Prev --}}
         <button @click="prev()"
                 class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center z-10"
                 style="background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); transition: background 0.15s ease;"
@@ -152,7 +149,6 @@
             </svg>
         </button>
 
-        {{-- Image --}}
         <div class="flex items-center justify-center px-16 sm:px-20 w-full h-full">
             <img :src="photos[idx]?.url"
                  :alt="photos[idx]?.name"
@@ -160,7 +156,6 @@
                  style="box-shadow: 0 25px 80px rgba(0,0,0,0.8);">
         </div>
 
-        {{-- Next --}}
         <button @click="next()"
                 class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center z-10"
                 style="background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); transition: background 0.15s ease;"
@@ -171,7 +166,6 @@
             </svg>
         </button>
 
-        {{-- Bottom bar --}}
         <div class="absolute bottom-0 left-0 right-0 flex items-center justify-between px-5 py-4"
              style="background: linear-gradient(transparent, rgba(0,0,0,0.65));">
             <span x-text="photos[idx]?.name" class="text-sm truncate max-w-[50%]" style="color: rgba(255,255,255,0.55);"></span>

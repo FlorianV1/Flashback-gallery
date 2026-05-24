@@ -34,13 +34,40 @@
                     </div>
                 </a>
                 <nav class="flex items-center gap-1 text-sm">
-                    <a href="/admin"
-                       class="px-3 py-1.5 rounded-sm text-sm transition-all"
-                       style="color: #8B7355;"
-                       onmouseenter="this.style.color='#2C1810'; this.style.background='rgba(44,24,16,0.06)'"
-                       onmouseleave="this.style.color='#8B7355'; this.style.background='transparent'">
-                        Dashboard
-                    </a>
+                    @auth
+                        <a href="/admin"
+                           class="px-3 py-1.5 rounded-sm text-sm transition-all"
+                           style="color: #8B7355;"
+                           onmouseenter="this.style.color='#2C1810'; this.style.background='rgba(44,24,16,0.06)'"
+                           onmouseleave="this.style.color='#8B7355'; this.style.background='transparent'">
+                            {{ auth()->user()->isAdmin() ? 'Dashboard' : 'My Albums' }}
+                        </a>
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit"
+                                    class="px-3 py-1.5 rounded-sm text-sm transition-all"
+                                    style="color: #8B7355;"
+                                    onmouseenter="this.style.color='#2C1810'; this.style.background='rgba(44,24,16,0.06)'"
+                                    onmouseleave="this.style.color='#8B7355'; this.style.background='transparent'">
+                                Sign out
+                            </button>
+                        </form>
+                    @else
+                        <a href="/admin/login"
+                           class="px-3 py-1.5 rounded-sm text-sm transition-all"
+                           style="color: #8B7355;"
+                           onmouseenter="this.style.color='#2C1810'; this.style.background='rgba(44,24,16,0.06)'"
+                           onmouseleave="this.style.color='#8B7355'; this.style.background='transparent'">
+                            Sign in
+                        </a>
+                        <a href="/admin/register"
+                           class="px-3 py-1.5 rounded-sm text-sm font-medium transition-all"
+                           style="background: #E85D04; color: #ffffff; border-radius: 4px;"
+                           onmouseenter="this.style.background='#C84B00'"
+                           onmouseleave="this.style.background='#E85D04'">
+                            Sign up
+                        </a>
+                    @endauth
                 </nav>
             </div>
         </div>

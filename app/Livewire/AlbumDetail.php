@@ -22,9 +22,10 @@ class AlbumDetail extends Component
     {
         $photos = $this->album->photos()->orderBy('sort_order')->get();
 
-        $downloadUrls = $photos->map(
-            fn ($photo) => route('photos.download', ['album' => $this->album->id, 'photo' => $photo->id])
-        )->values()->toArray();
+        $downloadUrls = $photos
+            ->map(fn ($photo) => route('photos.download', ['album' => $this->album->id, 'photo' => $photo->id]))
+            ->values()
+            ->toArray();
 
         return view('livewire.album-detail', [
             'photos' => $photos,

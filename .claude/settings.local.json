@@ -19,7 +19,19 @@
       "Bash(Select-Object -ExpandProperty FullName)",
       "Bash(cd C:\\\\\\\\Users\\\\\\\\Florian\\\\\\\\Herd\\\\\\\\flashback)",
       "PowerShell(head *)",
-      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Florian\\\\Herd\\\\flashback\" -Recurse -Directory | Where-Object {$_.Name -match \"Filament|Livewire|Models\"} | Select-Object -ExpandProperty FullName)"
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Florian\\\\Herd\\\\flashback\" -Recurse -Directory | Where-Object {$_.Name -match \"Filament|Livewire|Models\"} | Select-Object -ExpandProperty FullName)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Flori\\\\Herd\\\\flashback-photobook\" -Force)",
+      "Bash(Select-Object Name, Mode)",
+      "Bash(composer require *)",
+      "PowerShell(cd \"C:\\\\Users\\\\Flori\\\\Herd\\\\flashback-photobook\"; php artisan tinker --execute=\"use chillerlan\\\\QRCode\\\\QRCode; use chillerlan\\\\QRCode\\\\QROptions; \\\\$o = new QROptions\\(['outputType' => QRCode::OUTPUT_MARKUP_SVG, 'svgAddXmlHeader' => false, 'drawLightModules' => false]\\); \\\\$svg = \\(new QRCode\\(\\\\$o\\)\\)->render\\('https://example.com'\\); echo strlen\\(\\\\$svg\\) > 100 ? 'QR OK' : 'FAIL';\" 2>&1)",
+      "PowerShell(cd \"C:\\\\Users\\\\Flori\\\\Herd\\\\flashback-photobook\"; php -r \"require 'vendor/autoload.php'; use chillerlan\\\\QRCode\\\\QRCode; use chillerlan\\\\QRCode\\\\QROptions; \\\\$o = new QROptions\\(['outputType' => QRCode::OUTPUT_MARKUP_SVG, 'svgAddXmlHeader' => false, 'drawLightModules' => false]\\); \\\\$svg = \\(new QRCode\\(\\\\$o\\)\\)->render\\('https://example.com'\\); echo strlen\\(\\\\$svg\\) > 100 ? 'QR OK \\(' . strlen\\(\\\\$svg\\) . ' bytes\\)' : 'FAIL';\" 2>&1)",
+      "PowerShell(php --ini 2>&1 | Select-Object -First 5)",
+      "PowerShell(php -r \"echo 'upload_max_filesize: ' . ini_get\\('upload_max_filesize'\\) . PHP_EOL . 'post_max_size: ' . ini_get\\('post_max_size'\\) . PHP_EOL . 'memory_limit: ' . ini_get\\('memory_limit'\\) . PHP_EOL;\")",
+      "PowerShell(cd \"C:\\\\Users\\\\Flori\\\\Herd\\\\flashback-photobook\"; Get-ChildItem \"storage\\\\app\\\\public\" -Recurse -File | ForEach-Object { $_.FullName.Replace\\($PWD.Path + \"\\\\storage\\\\app\\\\public\\\\\", \"\"\\) } | Select-Object -First 20)",
+      "PowerShell(cd \"C:\\\\Users\\\\Flori\\\\Herd\\\\flashback-photobook\"; php artisan tinker --execute=\"App\\\\Models\\\\Photo::latest\\(\\)->take\\(3\\)->get\\(['id','filename','original_filename']\\)->each\\(fn\\(\\\\$p\\) => print_r\\(\\\\$p->toArray\\(\\)\\)\\);\" 2>&1)",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(Get-Content *)",
+      "PowerShell(Set-Content *)"
     ]
   }
 }
