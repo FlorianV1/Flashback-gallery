@@ -6,6 +6,7 @@ use App\Filament\Resources\AlbumResource;
 use App\Models\Photo;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Str;
 
 class EditAlbum extends EditRecord
 {
@@ -14,8 +15,21 @@ class EditAlbum extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('view_album')
+                ->label('View Album')
+                ->icon('heroicon-o-arrow-top-right-on-square')
+                ->url(fn () => route('albums.show', $this->record))
+                ->openUrlInNewTab()
+                ->color('gray'),
+
             Actions\DeleteAction::make(),
         ];
+    }
+
+    public function regenerateShareLink(): void
+    {
+        $this->record->update(['share_token' => Str::uuid()->toString()]);
+        $this->redirect($this->getResource()::getUrl('edit', ['record' => $this->record]));
     }
 
     protected function getRedirectUrl(): string

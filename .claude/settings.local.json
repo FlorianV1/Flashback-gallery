@@ -31,7 +31,8 @@
       "PowerShell(cd \"C:\\\\Users\\\\Flori\\\\Herd\\\\flashback-photobook\"; php artisan tinker --execute=\"App\\\\Models\\\\Photo::latest\\(\\)->take\\(3\\)->get\\(['id','filename','original_filename']\\)->each\\(fn\\(\\\\$p\\) => print_r\\(\\\\$p->toArray\\(\\)\\)\\);\" 2>&1)",
       "PowerShell(Get-ChildItem *)",
       "PowerShell(Get-Content *)",
-      "PowerShell(Set-Content *)"
+      "PowerShell(Set-Content *)",
+      "PowerShell(php artisan view:clear)"
     ]
   }
 }

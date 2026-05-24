@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\AlbumResource\Pages;
 use App\Filament\Resources\AlbumResource\RelationManagers\PhotosRelationManager;
 use App\Models\Album;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -141,26 +143,40 @@ class AlbumResource extends Resource
                                 }
 
                                 $url = $record->shareUrl();
-                                $qrSrc = route('albums.qr', $record);
+
+                                $options = new QROptions([
+                                    'outputType' => QRCode::OUTPUT_MARKUP_SVG,
+                                    'svgAddXmlHeader' => false,
+                                    'drawLightModules' => false,
+                                    'scale' => 5,
+                                ]);
+                                $qrDataUri = (new QRCode($options))->render($url);
 
                                 return new HtmlString('
-                                    <div class="flex flex-col sm:flex-row gap-6 items-start">
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-xs font-medium uppercase tracking-widest mb-2" style="color:#A89880;">Access Link</p>
-                                            <p class="text-xs mb-3" style="color:#8B7355;">Anyone with this link can open the album without needing the access code.</p>
-                                            <div class="flex items-center gap-2">
-                                                <code class="flex-1 text-xs px-3 py-2 rounded-sm truncate" style="background:#F0EBE2; color:#2C1810; font-family:monospace;">' . e($url) . '</code>
+                                    <div style="display:grid; grid-template-columns:1fr auto; gap:2rem; align-items:start;">
+                                        <div style="min-width:0;">
+                                            <p style="font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#A89880; margin:0 0 0.5rem;">Access Link</p>
+                                            <p style="font-size:0.75rem; color:#8B7355; margin:0 0 0.75rem;">Anyone with this link can open the album without needing the access code.</p>
+                                            <div style="display:flex; gap:0.5rem; align-items:center;">
+                                                <code style="flex:1; min-width:0; font-size:0.7rem; padding:0.5rem 0.75rem; border-radius:4px; background:#F0EBE2; color:#2C1810; font-family:monospace; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;">' . e($url) . '</code>
                                                 <button type="button"
-                                                        onclick="navigator.clipboard.writeText(\'' . e($url) . '\').then(() => { this.textContent = \'Copied!\'; setTimeout(() => this.textContent = \'Copy\', 1500); })"
-                                                        class="shrink-0 px-3 py-2 text-xs rounded-sm font-medium transition-all"
-                                                        style="background:#2C1810; color:#FAF7F2;">
+                                                        onclick="(function(btn,text){if(navigator.clipboard){navigator.clipboard.writeText(text).then(function(){btn.textContent=\'Copied!\';setTimeout(function(){btn.textContent=\'Copy\'},1500)});}else{var ta=document.createElement(\'textarea\');ta.value=text;ta.style.position=\'fixed\';ta.style.opacity=\'0\';document.body.appendChild(ta);ta.select();document.execCommand(\'copy\');document.body.removeChild(ta);btn.textContent=\'Copied!\';setTimeout(function(){btn.textContent=\'Copy\'},1500);}})(this,\'' . e($url) . '\')"
+                                                        style="flex-shrink:0; padding:0.5rem 0.875rem; font-size:0.75rem; border-radius:4px; font-weight:600; background:#2C1810; color:#FAF7F2; border:none; cursor:pointer; transition:opacity 0.15s;"
+                                                        onmouseover="this.style.opacity=\'0.85\'" onmouseout="this.style.opacity=\'1\'">
                                                     Copy
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="shrink-0">
-                                            <p class="text-xs font-medium uppercase tracking-widest mb-2" style="color:#A89880;">QR Code</p>
-                                            <img src="' . e($qrSrc) . '" alt="QR Code" style="width:140px; height:140px; border-radius:4px; border:1px solid #DDD5C5; padding:8px; background:#fff;">
+                                        <div style="flex-shrink:0; text-align:center;">
+                                            <p style="font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#A89880; margin:0 0 0.5rem;">QR Code</p>
+                                            <img src="' . $qrDataUri . '" alt="QR Code" style="width:140px; height:140px; border-radius:4px; border:1px solid #DDD5C5; padding:8px; background:#fff; display:block;">
+                                            <button type="button"
+                                                    wire:click="regenerateShareLink"
+                                                    wire:confirm="Regenerate the QR code and share link? The old link will stop working immediately."
+                                                    style="margin-top:0.5rem; width:100%; padding:0.375rem 0.5rem; font-size:0.7rem; border-radius:4px; font-weight:500; background:transparent; color:#8B7355; border:1px solid #DDD5C5; cursor:pointer; transition:all 0.15s;"
+                                                    onmouseover="this.style.background=\'#F0EBE2\'" onmouseout="this.style.background=\'transparent\'">
+                                                ↺ Regenerate
+                                            </button>
                                         </div>
                                     </div>
                                 ');

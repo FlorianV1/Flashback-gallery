@@ -15,6 +15,8 @@ class AlbumDetail extends Component
     {
         if (! $album->isUnlocked()) {
             $this->redirectRoute('albums.unlock', $album);
+
+            return;
         }
     }
 
