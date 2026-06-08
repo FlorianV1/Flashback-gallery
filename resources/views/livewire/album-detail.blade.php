@@ -262,7 +262,7 @@
                  :class="{ 'opacity-0': lbLoading }"
                  style="box-shadow: 0 25px 80px rgba(0,0,0,0.8); transition: opacity 0.2s ease;"
                  @load="lbLoading = false"
-                 @error="lbLoading = false">
+                 x-on:error="lbLoading = false">
         </div>
 
         {{-- Next --}}
