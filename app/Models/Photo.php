@@ -33,4 +33,30 @@ class Photo extends Model
     {
         return Storage::disk('public')->path($this->filename);
     }
+
+    public function getThumbnailUrl(): string
+    {
+        $path = $this->variantPath('thumbs');
+
+        return Storage::disk('public')->exists($path)
+            ? Storage::disk('public')->url($path)
+            : $this->getUrl();
+    }
+
+    public function getWebUrl(): string
+    {
+        $path = $this->variantPath('web');
+
+        return Storage::disk('public')->exists($path)
+            ? Storage::disk('public')->url($path)
+            : $this->getUrl();
+    }
+
+    private function variantPath(string $variant): string
+    {
+        $dir = dirname($this->filename);
+        $base = pathinfo($this->filename, PATHINFO_FILENAME);
+
+        return $dir . '/' . $variant . '/' . $base . '.jpg';
+    }
 }

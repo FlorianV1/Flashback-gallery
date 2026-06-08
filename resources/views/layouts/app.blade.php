@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>{{ $title ?? 'Flashback Gallery' }}</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -10,6 +10,16 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    <style>
+        @keyframes shimmer {
+            to { background-position: -200% center; }
+        }
+        .skeleton-shimmer {
+            background: linear-gradient(90deg, #EDE8DF 25%, #E2DAD0 50%, #EDE8DF 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.6s ease-in-out infinite;
+        }
+    </style>
 </head>
 <body class="min-h-screen" style="background-color: #FAF7F2; color: #2C1810; font-family: 'DM Sans', sans-serif;">
 

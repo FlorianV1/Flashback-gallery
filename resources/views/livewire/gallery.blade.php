@@ -87,11 +87,13 @@
                         <div class="relative aspect-square overflow-hidden" style="background: #EDE8DF;">
 
                             @if($album->coverPhoto)
+                                <div class="skeleton-shimmer absolute inset-0 pointer-events-none"></div>
                                 <img
-                                    src="{{ $album->coverPhoto->getUrl() }}"
+                                    src="{{ $album->coverPhoto->getThumbnailUrl() }}"
                                     alt="{{ $album->title }}"
-                                    class="w-full h-full object-cover"
-                                    style="transition: transform 0.4s ease; {{ $isLocked ? 'filter: brightness(0.6) saturate(0.5);' : '' }}"
+                                    class="w-full h-full object-cover block relative"
+                                    style="opacity: 0; transition: opacity 0.3s ease, transform 0.4s ease; {{ $isLocked ? 'filter: brightness(0.6) saturate(0.5);' : '' }}"
+                                    onload="this.style.opacity='1'; this.previousElementSibling.style.display='none';"
                                     onmouseenter="this.style.transform='scale(1.04)'"
                                     onmouseleave="this.style.transform='scale(1)'"
                                     loading="lazy"

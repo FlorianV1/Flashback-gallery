@@ -19,7 +19,8 @@
       "Bash(Select-Object -ExpandProperty FullName)",
       "Bash(cd C:\\\\\\\\Users\\\\\\\\Florian\\\\\\\\Herd\\\\\\\\flashback)",
       "PowerShell(head *)",
-      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Florian\\\\Herd\\\\flashback\" -Recurse -Directory | Where-Object {$_.Name -match \"Filament|Livewire|Models\"} | Select-Object -ExpandProperty FullName)"
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Florian\\\\Herd\\\\flashback\" -Recurse -Directory | Where-Object {$_.Name -match \"Filament|Livewire|Models\"} | Select-Object -ExpandProperty FullName)",
+      "Bash(dir C:\\\\Users\\\\Florian\\\\Herd\\\\flashback)"
     ]
   }
 }

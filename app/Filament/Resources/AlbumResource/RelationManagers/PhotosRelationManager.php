@@ -3,8 +3,11 @@
 namespace App\Filament\Resources\AlbumResource\RelationManagers;
 
 use App\Models\Photo;
+use App\Services\ImageProcessor;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms;
 use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -75,7 +78,7 @@ class PhotosRelationManager extends RelationManager
                             Forms\Components\Hidden::make('original_filenames'),
                         ];
                     })
-                    ->action(function (array $data): void {
+                    ->action(function (array $data, ImageProcessor $processor): void {
                         $photos = $data['photos'] ?? [];
                         $originalFilenames = $data['original_filenames'] ?? [];
                         $maxOrder = $this->ownerRecord->photos()->max('sort_order') ?? 0;
@@ -88,6 +91,7 @@ class PhotosRelationManager extends RelationManager
                                 'original_filename' => $originalFilenames[$storedPath] ?? basename($storedPath),
                                 'sort_order' => $maxOrder,
                             ]);
+                            $processor->generateVariants($storedPath);
                         }
 
                         Notification::make()
@@ -107,11 +111,24 @@ class PhotosRelationManager extends RelationManager
                     }),
 
                 DeleteAction::make()
-                    ->before(function (Photo $record): void {
+                    ->before(function (Photo $record, ImageProcessor $processor): void {
                         if ($this->ownerRecord->cover_photo_id === $record->id) {
                             $this->ownerRecord->update(['cover_photo_id' => null]);
                         }
+                        $processor->deleteVariants($record->filename);
                         Storage::disk('public')->delete($record->filename);
+                    }),
+            ])
+            ->toolbarActions([
+                DeleteBulkAction::make()
+                    ->before(function (Collection $records, ImageProcessor $processor): void {
+                        foreach ($records as $record) {
+                            if ($this->ownerRecord->cover_photo_id === $record->id) {
+                                $this->ownerRecord->update(['cover_photo_id' => null]);
+                            }
+                            $processor->deleteVariants($record->filename);
+                            Storage::disk('public')->delete($record->filename);
+                        }
                     }),
             ]);
     }
