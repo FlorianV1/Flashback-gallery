@@ -12,23 +12,33 @@ class PageViewsWidget extends StatsOverviewWidget
 
     protected function getStats(): array
     {
+        $totalViews     = PageView::count();
+        $todayViews     = PageView::whereDate('created_at', today())->count();
+        $yesterdayViews = PageView::whereDate('created_at', today()->subDay())->count();
+        $weekViews      = PageView::where('created_at', '>=', now()->subWeek())->count();
+        $uniqueVisitors = PageView::distinct('ip')->count('ip');
+
+        $trend = $yesterdayViews > 0
+            ? round((($todayViews - $yesterdayViews) / $yesterdayViews) * 100, 1)
+            : ($todayViews > 0 ? 100 : 0);
+
         return [
-            Stat::make('Total Views', PageView::count())
+            Stat::make('Total Views', number_format($totalViews))
                 ->description('All time page views')
                 ->descriptionIcon('heroicon-o-eye')
                 ->color('primary'),
 
-            Stat::make('Today', PageView::whereDate('created_at', today())->count())
-                ->description('Views today')
-                ->descriptionIcon('heroicon-o-calendar-days')
-                ->color('primary'),
+            Stat::make('Today', $todayViews)
+                ->description($trend >= 0 ? "+{$trend}% vs yesterday" : "{$trend}% vs yesterday")
+                ->descriptionIcon($trend >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
+                ->color($trend >= 0 ? 'success' : 'danger'),
 
-            Stat::make('This Week', PageView::where('created_at', '>=', now()->subWeek())->count())
+            Stat::make('This Week', number_format($weekViews))
                 ->description('Last 7 days')
                 ->descriptionIcon('heroicon-o-chart-bar')
                 ->color('primary'),
 
-            Stat::make('Unique Visitors', PageView::distinct('ip')->count('ip'))
+            Stat::make('Unique Visitors', number_format($uniqueVisitors))
                 ->description('By IP address')
                 ->descriptionIcon('heroicon-o-finger-print')
                 ->color('primary'),

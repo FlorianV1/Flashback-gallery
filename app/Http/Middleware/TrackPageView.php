@@ -18,15 +18,23 @@ class TrackPageView
             $response->isSuccessful() &&
             ! $request->is('admin*', 'livewire*', 'up', '*/download')
         ) {
-            try {
-                PageView::create([
-                    'page' => '/' . ltrim($request->path(), '/'),
-                    'ip' => $request->ip(),
-                    'user_agent' => mb_substr((string) $request->userAgent(), 0, 255),
-                    'referrer' => mb_substr((string) $request->header('referer'), 0, 255),
-                ]);
-            } catch (\Throwable) {
-                // Never let tracking break the response
+            $ip = $request->ip();
+            $ua = (string) $request->userAgent();
+
+            $isPrivateIp = ! filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE);
+            $isBot = (bool) preg_match('/bot|crawl|spider|slurp|facebookexternalhit/i', $ua);
+
+            if (! $isPrivateIp && ! $isBot) {
+                try {
+                    PageView::create([
+                        'page'       => '/' . ltrim($request->path(), '/'),
+                        'ip'         => $ip,
+                        'user_agent' => mb_substr($ua, 0, 255),
+                        'referrer'   => mb_substr((string) $request->header('referer'), 0, 255),
+                    ]);
+                } catch (\Throwable) {
+                    // Never let tracking break the response
+                }
             }
         }
 
