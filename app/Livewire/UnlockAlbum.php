@@ -12,7 +12,7 @@ class UnlockAlbum extends Component
 {
     public Album $album;
 
-    #[Validate('required|string|max:8')]
+    #[Validate('required|string|max:20')]
     public string $code = '';
 
     public bool $error = false;

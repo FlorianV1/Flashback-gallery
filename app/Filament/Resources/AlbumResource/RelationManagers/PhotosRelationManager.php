@@ -46,7 +46,7 @@ class PhotosRelationManager extends RelationManager
 
                 Tables\Columns\IconColumn::make('is_cover')
                     ->label('Cover')
-                    ->getStateUsing(fn (Photo $record): bool => $this->ownerRecord->cover_photo_id === $record->id)
+                    ->getStateUsing(fn ($record): bool => $record && $this->ownerRecord->cover_photo_id === $record->id)
                     ->boolean()
                     ->trueIcon('heroicon-o-star')
                     ->falseIcon('heroicon-o-star')

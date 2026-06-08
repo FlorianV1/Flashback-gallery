@@ -12,6 +12,7 @@ class Photo extends Model
         'album_id',
         'filename',
         'original_filename',
+        'type',
         'sort_order',
     ];
 
@@ -22,6 +23,11 @@ class Photo extends Model
     public function album(): BelongsTo
     {
         return $this->belongsTo(Album::class);
+    }
+
+    public function isVideo(): bool
+    {
+        return $this->type === 'video';
     }
 
     public function getUrl(): string

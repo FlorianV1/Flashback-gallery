@@ -17,7 +17,7 @@
             <div class="flex-1 h-px" style="background: linear-gradient(to left, transparent, #CEC6B5);"></div>
         </div>
         <p style="color: #8B7355; max-width: 30rem; margin: 0 auto; font-size: 1.0rem;" class="leading-relaxed">
-            Gave momenten vastgelegd op het cae
+            Gave momenten vastgelegd op de camera
         </p>
     </div>
 
