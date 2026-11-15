@@ -100,22 +100,27 @@
             @endif
         </div>
 
-        {{-- Download All --}}
+        {{-- Download All (single zip — one navigation, works on iOS & Android) --}}
         @if($photos->total() > 0)
-            <button
-                type="button"
+            <a
+                href="{{ route('albums.download', $album) }}"
                 id="download-all-btn"
-                onclick="downloadAll({{ Js::from($downloadUrls) }}, this)"
+                x-data="{ preparing: false }"
+                @click="preparing = true; setTimeout(() => preparing = false, 6000)"
                 class="inline-flex items-center gap-2 font-medium px-5 py-2.5 rounded-sm text-sm shrink-0"
                 style="background: #2C1810; color: #FAF7F2; transition: background 0.15s ease;"
                 onmouseenter="this.style.background='#1a0e08'"
                 onmouseleave="this.style.background='#2C1810'"
             >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg x-show="!preparing" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                 </svg>
-                Download All
-            </button>
+                <svg x-show="preparing" x-cloak class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+                <span x-text="preparing ? 'Preparing zip…' : 'Download All ({{ $photos->total() }})'">Download All ({{ $photos->total() }})</span>
+            </a>
         @endif
     </div>
 
@@ -283,29 +288,16 @@
             <div class="flex items-center gap-4 shrink-0">
                 <span x-text="`${idx + 1} / ${photos.length}`" class="text-sm font-mono" style="color: rgba(255,255,255,0.4); font-size: 0.75rem;"></span>
 
-                {{-- Standard download for non-iOS --}}
-                <a x-show="!isIOS"
-                   :href="photos[idx]?.dl"
+                {{-- Real download on every platform: same-origin link with
+                     Content-Disposition: attachment. iOS Safari 13+ and Android
+                     Chrome both honour this; iOS also gets a hint about Files. --}}
+                <a :href="photos[idx]?.dl"
                    :download="photos[idx]?.name"
                    class="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-sm"
                    style="background: rgba(232,93,4,0.85); color: #ffffff; transition: background 0.15s ease;"
                    onmouseenter="this.style.background='rgba(200,75,0,0.95)'"
                    onmouseleave="this.style.background='rgba(232,93,4,0.85)'"
-                   @click.stop>
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                    </svg>
-                    Save
-                </a>
-
-                {{-- iOS: open image in new tab so user can long-press to save --}}
-                <a x-show="isIOS"
-                   :href="photos[idx]?.url"
-                   target="_blank"
-                   rel="noopener"
-                   class="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-sm"
-                   style="background: rgba(232,93,4,0.85); color: #ffffff; transition: background 0.15s ease;"
-                   @click.stop="showIOSTip = true; setTimeout(() => showIOSTip = false, 4000)">
+                   @click.stop="if (isIOS) { showIOSTip = true; setTimeout(() => showIOSTip = false, 4000); }">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                     </svg>
@@ -324,46 +316,13 @@
              x-transition:leave-end="opacity-0"
              class="absolute bottom-24 left-0 right-0 flex justify-center pointer-events-none">
             <div class="text-xs px-3 py-2 rounded-sm" style="background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.9); backdrop-filter: blur(8px);">
-                Press &amp; hold the image to save to your Photos
+                Saved to Files &rsaquo; Downloads &mdash; open it there to add to Photos
             </div>
         </div>
     </div>
 </div>
 
 <script>
-function downloadAll(urls, btn) {
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-    if (isIOS) {
-        const original = btn.innerHTML;
-        btn.disabled = true;
-        btn.innerHTML = 'Open each photo and long-press to save';
-        setTimeout(() => { btn.disabled = false; btn.innerHTML = original; }, 3500);
-        return;
-    }
-
-    btn.disabled = true;
-    const original = btn.innerHTML;
-    btn.innerHTML = '<svg class="w-4 h-4 animate-spin inline-block mr-1" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Downloading…';
-    urls.forEach((url, i) => {
-        setTimeout(() => {
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = '';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            if (i === urls.length - 1) {
-                setTimeout(() => {
-                    btn.disabled = false;
-                    btn.innerHTML = original;
-                }, 600);
-            }
-        }, i * 650);
-    });
-}
-
 function photoError(img) {
     img.style.display = 'none';
     const error = img.closest('.photo-cell').querySelector('.photo-error');

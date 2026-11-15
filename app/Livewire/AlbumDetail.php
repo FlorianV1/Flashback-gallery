@@ -25,13 +25,8 @@ class AlbumDetail extends Component
     {
         $photos = $this->album->photos()->orderBy('sort_order')->paginate(50);
 
-        $downloadUrls = $photos->getCollection()->map(
-            fn ($photo) => route('photos.download', ['album' => $this->album->id, 'photo' => $photo->id])
-        )->values()->toArray();
-
         return view('livewire.album-detail', [
             'photos' => $photos,
-            'downloadUrls' => $downloadUrls,
-        ])->title($this->album->title . ' — Flashback Gallery');
+        ])->title($this->album->title.' — Flashback Gallery');
     }
 }
