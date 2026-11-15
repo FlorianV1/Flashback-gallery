@@ -14,8 +14,6 @@ Route::get('/albums/{album}', AlbumDetail::class)->name('albums.show');
 Route::get('/albums/{album}/unlock', UnlockAlbum::class)->name('albums.unlock');
 Route::get('/albums/{album}/photos/{photo}/download', [PhotoController::class, 'download'])
     ->name('photos.download');
-Route::get('/albums/{album}/download', [PhotoController::class, 'downloadAlbum'])
-    ->name('albums.download');
 
 Route::get('/join/{token}', AlbumAccessController::class)->name('albums.join');
 

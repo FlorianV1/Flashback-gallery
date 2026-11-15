@@ -69,7 +69,7 @@
     </div>
 
     {{-- Album header --}}
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-10 pb-8" style="border-bottom: 1px solid #E8E0D4;">
+    <div class="mb-10 pb-8" style="border-bottom: 1px solid #E8E0D4;">
         <div>
             <p class="text-xs font-medium uppercase tracking-widest mb-2" style="color: #A89880; letter-spacing: 0.18em;">
                 {{ $album->date_of_outing->format('F j, Y') }}
@@ -100,28 +100,6 @@
             @endif
         </div>
 
-        {{-- Download All (single zip — one navigation, works on iOS & Android) --}}
-        @if($photos->total() > 0)
-            <a
-                href="{{ route('albums.download', $album) }}"
-                id="download-all-btn"
-                x-data="{ preparing: false }"
-                @click="preparing = true; setTimeout(() => preparing = false, 6000)"
-                class="inline-flex items-center gap-2 font-medium px-5 py-2.5 rounded-sm text-sm shrink-0"
-                style="background: #2C1810; color: #FAF7F2; transition: background 0.15s ease;"
-                onmouseenter="this.style.background='#1a0e08'"
-                onmouseleave="this.style.background='#2C1810'"
-            >
-                <svg x-show="!preparing" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                </svg>
-                <svg x-show="preparing" x-cloak class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                </svg>
-                <span x-text="preparing ? 'Preparing zip…' : 'Download All ({{ $photos->total() }})'">Download All ({{ $photos->total() }})</span>
-            </a>
-        @endif
     </div>
 
     {{-- Photo grid --}}
