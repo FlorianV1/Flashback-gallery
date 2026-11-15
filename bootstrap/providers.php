@@ -1,6 +1,11 @@
 <?php
 
+use App\Providers\AppServiceProvider;
+use App\Providers\Filament\AdminPanelProvider;
+use Bugsnag\BugsnagLaravel\BugsnagServiceProvider;
+
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\Filament\AdminPanelProvider::class,
+    BugsnagServiceProvider::class,
+    AppServiceProvider::class,
+    AdminPanelProvider::class,
 ];

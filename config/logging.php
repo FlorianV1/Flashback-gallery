@@ -54,8 +54,18 @@ return [
 
         'stack' => [
             'driver' => 'stack',
-            'channels' => explode(',', (string) env('LOG_STACK', 'single')),
+            // Bugsnag is appended automatically whenever BUGSNAG_API_KEY is
+            // set, so turning on error reporting in production is a one-line
+            // .env change and local dev is unaffected.
+            'channels' => array_values(array_unique(array_filter([
+                ...explode(',', (string) env('LOG_STACK', 'single')),
+                env('BUGSNAG_API_KEY') ? 'bugsnag' : null,
+            ]))),
             'ignore_exceptions' => false,
+        ],
+
+        'bugsnag' => [
+            'driver' => 'bugsnag',
         ],
 
         'single' => [
